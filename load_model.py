@@ -1,17 +1,23 @@
 print("Loading model...")
+import os
 import torch
 from img_convert import get_image_fromb64, get_b64_fromimage
 
-model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-midas = torch.hub.load("static/intel-isl_MiDaS_master", path = 'static/dpt_large-midas-2f21e586.pt', \
-model=model_type, source ='local')
+model_dir = os.path.join('static')
+torch.hub.set_dir(model_dir)
+#midas = torch.hub.load("intel-isl/MiDaS", model_type, source ='local')
 
+model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
+#midas = torch.hub.load("static/intel-isl_MiDaS_master", path = 'static/dpt_large-midas-2f21e586.pt', \
+#model=model_type, source ='local')
+midas = torch.hub.load("intel-isl/MiDaS", model_type)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 midas.to(device)
 midas.eval()
 
-midas_transforms = torch.hub.load("static/intel-isl_MiDaS_master", "transforms", source ='local')
+midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
+#midas_transforms = torch.hub.load("static/intel-isl_MiDaS_master", "transforms", source ='local')
 if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
     transform = midas_transforms.dpt_transform
 else:
