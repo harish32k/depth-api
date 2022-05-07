@@ -14,6 +14,8 @@ RUN pip3 install torch torchvision torchaudio --extra-index-url https://download
 
 RUN pip3 install -r requirements.txt
 
+RUN python3 load_model.py
+
 CMD exec gunicorn -b :5000 — max-requests 1 — graceful-timeout 300 -t 600 app:app
 
 EXPOSE 5000
