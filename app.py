@@ -7,6 +7,27 @@ app = Flask(__name__)
 def predict():
     #img_names = ['img', 'img1', 'img2', 'img3', 'img4']
     print("received image(s)")
+    outputs = []
+    req_list = request.json.get('instances')
+    
+    for ob in req_list:
+        key = list(ob.keys())[0]; val = list(ob.values())[0]
+        print("preprocessing")
+        input_batch, img = model.pre_process(val)
+        print("infering")
+        output = model.infer(input_batch, img)
+        print("postprocessing")
+        required_img = model.post_process(output)
+        outputs.append({key : required_img})
+    
+    to_return = {'predictions' : outputs}
+    return jsonify(to_return)
+
+"""
+@app.route('/predict', methods=['POST', 'GET'])
+def predict():
+    #img_names = ['img', 'img1', 'img2', 'img3', 'img4']
+    print("received image(s)")
     to_return = {}
     req = request.json
     for img_name in req.keys():
@@ -19,6 +40,7 @@ def predict():
         to_return[img_name] = req_img
     
     return jsonify(to_return)
+"""
 
 
 @app.route('/healthz')

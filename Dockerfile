@@ -16,6 +16,6 @@ RUN pip3 install -r requirements.txt
 
 RUN python3 load_model.py
 
-CMD exec gunicorn -b :5000 — max-requests 1 — graceful-timeout 300 -t 600 app:app
+CMD exec gunicorn --bind 0.0.0.0:5000 --timeout=150 app:app -w 1
 
 EXPOSE 5000
