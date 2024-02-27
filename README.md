@@ -1,5 +1,5 @@
 
-# Caption API
+# Depth API
 
 API to get a depth map from images, using the MiDAS depth estimation model. (open-source model)
 
